@@ -20,8 +20,11 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity):
-        # Your code here
+    def __init__(self, capacity = MIN_CAPACITY):
+        if capacity < MIN_CAPACITY:
+            self.capacity = MIN_CAPACITY
+        else:
+            self.capacity = capacity
 
 
     def get_num_slots(self):
@@ -34,7 +37,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        return self.capacity
 
 
     def get_load_factor(self):
@@ -53,7 +56,10 @@ class HashTable:
         Implement this, and/or DJB2.
         """
 
-        # Your code here
+        # FNV offset basis computed using "chongo <Landon Curt Noll> /\../\" when expressed in ASCII?
+        # 64 bit offset basis = 14695981039346656037
+        # 64 bit prime = 1099511628211
+        # XOR operator in python is ^
 
 
     def djb2(self, key):
