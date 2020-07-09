@@ -106,10 +106,14 @@ class HashTable:
         # once there is an empty spot in the linked list i can set the new value to that node in the linked list
         if self.storage[storage_index] is not None:
             current_node = self.storage[storage_index]
-            while current_node.next is not None:
-                current_node = current_node.next
+            while current_node.key != key:
+                if current_node.next is not None:
+                    current_node = current_node.next
+                else:
+                    current_node.next = HashTableEntry(key, value)
+
             else:
-                current_node.next = HashTableEntry(key, value)
+                current_node.value = value
         else:
             self.storage[storage_index] = HashTableEntry(key, value)
 
@@ -140,7 +144,10 @@ class HashTable:
                     print("Unable to find the Key in the Hash Table")
                     return        
             else:
-                current_node = current_node.next
+                # rather than just set the storage to None, there is a possiblity of deleting a node but still wanting to keep the next nodes in the list alive
+                # so it would be better to just set the node to the next node in the list rather than simply setting it to None
+                self.storage[storage_index] = self.storage[storage_index].next
+
 
         else:
             print("Unable to find the Key in the Hash Table")
@@ -155,7 +162,23 @@ class HashTable:
         Implement this.
         """
         # use the hash index function to get the index of the key in the storage
-        # 
+        # check if the value at the index is None - if it is return None, if not
+        # traverse the linked list at the index and compare the key we are searching for with the key and the current_node
+        # if we find the key, return the value associated with that key, otherwise return None if we traverse the whole linked list without finding the key
+
+        storage_index = self.hash_index(key)
+        # print("storage_index", storage_index)
+        if self.storage[storage_index] is not None:
+            current_node = self.storage[storage_index]
+            while current_node.key != key:
+                if current_node.next is not None:
+                    current_node = current_node.next
+                else:
+                    return None
+            else:
+                return current_node.value
+        else:
+            return None
 
 
     def resize(self, new_capacity):
