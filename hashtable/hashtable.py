@@ -26,6 +26,10 @@ class HashTable:
         else:
             self.capacity = capacity
 
+        # creates a list with the length of the capacity, each item in the list will be None initially and as values are hashed and put into storage the None values will change to
+        # linked lists i.e the HashTableEntry
+        self.storage = [None] * self.capacity
+
 
     def get_num_slots(self):
         """
@@ -60,6 +64,14 @@ class HashTable:
         # 64 bit offset basis = 14695981039346656037
         # 64 bit prime = 1099511628211
         # XOR operator in python is ^
+        key_utf8 = key.encode()
+        hash = 14695981039346656037
+        FNV_prime = 1099511628211
+        
+        for byte in key_utf8:
+            hash = hash * FNV_prime
+            hash = hash ^ byte
+        return hash
 
 
     def djb2(self, key):
@@ -76,8 +88,8 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        return self.fnv1(key) % self.capacity
+        # return self.djb2(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -87,7 +99,19 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # - get the index where this value needs to be added - can do that by using the hash index function and passing it the value
+        # - use the index to update the correct spot in the storage, also use HashTable entry to make the new entry in the storage a linked list passing in the key and value
+        storage_index = self.hash_index(value)
+        # check if the storage already has a value stored in it at the given index - if it does, i need to traverse the linked list until the next value becomes None
+        # once there is an empty spot in the linked list i can set the new value to that node in the linked list
+        if self.storage[storage_index] is not None:
+            current_node = self.storage[storage_index]
+            while current_node.next is not None:
+                current_node = current_node.next
+            else:
+                current_node.next = value
+        else:
+            self.storage[storage_index] = HashTableEntry(key, value)
 
 
     def delete(self, key):
