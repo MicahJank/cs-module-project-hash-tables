@@ -101,7 +101,7 @@ class HashTable:
         """
         # - get the index where this value needs to be added - can do that by using the hash index function and passing it the value
         # - use the index to update the correct spot in the storage, also use HashTable entry to make the new entry in the storage a linked list passing in the key and value
-        storage_index = self.hash_index(value)
+        storage_index = self.hash_index(key)
         # check if the storage already has a value stored in it at the given index - if it does, i need to traverse the linked list until the next value becomes None
         # once there is an empty spot in the linked list i can set the new value to that node in the linked list
         if self.storage[storage_index] is not None:
@@ -109,7 +109,7 @@ class HashTable:
             while current_node.next is not None:
                 current_node = current_node.next
             else:
-                current_node.next = value
+                current_node.next = HashTableEntry(key, value)
         else:
             self.storage[storage_index] = HashTableEntry(key, value)
 
@@ -122,7 +122,28 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # I need to hash the key to get the index
+        # use the index to find the correct spot in the storage to delete from
+        # check if the the key exists
+            # if there is no linked list at the hashed index then can print the warning
+            # if there is i still need to traversal the linked list and look for the key, ie i need to check the next value and compare keys until i find the right key
+        # if it does - remove it
+
+        storage_index = self.hash_index(key)
+        
+        if self.storage[storage_index] is not None:
+            current_node = self.storage[storage_index]
+            while current_node.key != key:
+                if current_node.next is not None:
+                    current_node = current_node.next
+                else:
+                    print("Unable to find the Key in the Hash Table")
+                    return        
+            else:
+                current_node = current_node.next
+
+        else:
+            print("Unable to find the Key in the Hash Table")
 
 
     def get(self, key):
@@ -133,7 +154,8 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # use the hash index function to get the index of the key in the storage
+        # 
 
 
     def resize(self, new_capacity):
