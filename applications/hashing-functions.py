@@ -34,8 +34,7 @@ def my_hash(s):
 def my_hash(s):
     s_utf8 = s.encode()
 ​
-    total =
-     0
+    total = 0
     for c in s_utf8:
         total += c
 ​
