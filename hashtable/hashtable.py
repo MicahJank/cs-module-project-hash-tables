@@ -30,6 +30,9 @@ class HashTable:
         # linked lists i.e the HashTableEntry
         self.storage = [None] * self.capacity
 
+        # counter to keep track of how many items are actually stored in the hashtable
+        self.stored_items = 0
+
 
     def get_num_slots(self):
         """
@@ -50,7 +53,13 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # load factor = number of actual stored items / length of storage(capacity)
+        slot_nums = self.get_num_slots()
+        items = self.stored_items
+
+        load_factor = items / slot_nums
+
+        return load_factor
 
 
     def fnv1(self, key):
@@ -99,6 +108,14 @@ class HashTable:
 
         Implement this.
         """
+
+        # Check the load factor initially and resize the hashtable if necessary
+        load_factor = self.get_load_factor()
+        print(load_factor)
+        if load_factor > 0.7:
+            print("growing")
+            self.resize(self.capacity * 2)
+
         # - get the index where this value needs to be added - can do that by using the hash index function and passing it the value
         # - use the index to update the correct spot in the storage, also use HashTable entry to make the new entry in the storage a linked list passing in the key and value
         storage_index = self.hash_index(key)
@@ -111,11 +128,14 @@ class HashTable:
                     current_node = current_node.next
                 else:
                     current_node.next = HashTableEntry(key, value)
+                    self.stored_items += 1
 
             else:
                 current_node.value = value
         else:
             self.storage[storage_index] = HashTableEntry(key, value)
+            self.stored_items += 1
+        
 
 
     def delete(self, key):
@@ -126,31 +146,40 @@ class HashTable:
 
         Implement this.
         """
-        # I need to hash the key to get the index
-        # use the index to find the correct spot in the storage to delete from
-        # check if the the key exists
-            # if there is no linked list at the hashed index then can print the warning
-            # if there is i still need to traversal the linked list and look for the key, ie i need to check the next value and compare keys until i find the right key
-        # if it does - remove it
+
+         # Check the load factor initially and resize the hashtable if necessary
+        load_factor = self.get_load_factor()
+        print(load_factor)
+        # we want to shrink here
+        if load_factor < 0.2:
+            print("shrinking")
+            self.resize(self.capacity // 2)
 
         storage_index = self.hash_index(key)
-        
-        if self.storage[storage_index] is not None:
-            current_node = self.storage[storage_index]
-            while current_node.key != key:
-                if current_node.next is not None:
-                    current_node = current_node.next
-                else:
-                    print("Unable to find the Key in the Hash Table")
-                    return        
-            else:
-                # rather than just set the storage to None, there is a possiblity of deleting a node but still wanting to keep the next nodes in the list alive
-                # so it would be better to just set the node to the next node in the list rather than simply setting it to None
-                self.storage[storage_index] = self.storage[storage_index].next
+        current_node = self.storage[storage_index]
 
-
-        else:
+        if current_node is None:
             print("Unable to find the Key in the Hash Table")
+        
+        if current_node.key == key:
+            self.storage[storage_index] = current_node.next
+            self.stored_items -= 1
+            return
+        else:
+            prev_node = current_node
+            current_node = current_node.next
+            
+            while current_node is not None:
+                if current_node.key == key:
+                    prev_node.next = current_node.next
+                    self.stored_items -= 1
+                    return
+                else:
+                    prev_node = current_node
+                    current_node = current_node.next
+
+            else:
+                print("Unable to find the Key in the Hash Table")
 
 
     def get(self, key):
@@ -181,6 +210,7 @@ class HashTable:
             return None
 
 
+    # works for both shrinking or growing
     def resize(self, new_capacity):
         """
         Changes the capacity of the hash table and
@@ -188,7 +218,24 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # create a new storage that has the capacity of the new capacity put in
+        # iterate over the old storage
+            # for each linked list in the storage i will need to traverse the linked list and rehash each key again
+            # and then assign the new hashed key into the new storage following same procedure
+        
+        old_storage = self.storage.copy()
+        
+        self.storage = [None] * new_capacity
+        self.capacity = new_capacity
+
+        for item in old_storage:
+            if item is not None:
+                current_node = item
+                while current_node is not None:
+                    self.put(current_node.key, current_node.value)
+                    current_node = current_node.next
+                    
+
 
 
 

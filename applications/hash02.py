@@ -16,8 +16,6 @@ class HashTableItem:
         self.key = key
         self.value = value
         self.next = next
-        
-​
 ​
 ​
 def my_hash(s):
