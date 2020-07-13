@@ -68,12 +68,14 @@ class HashTable:
 
         Implement this, and/or DJB2.
         """
-
         # FNV offset basis computed using "chongo <Landon Curt Noll> /\../\" when expressed in ASCII?
         # 64 bit offset basis = 14695981039346656037
         # 64 bit prime = 1099511628211
         # XOR operator in python is ^
+
         key_utf8 = key.encode()
+
+        # constants
         hash = 14695981039346656037
         FNV_prime = 1099511628211
         
@@ -116,11 +118,7 @@ class HashTable:
             print("growing")
             self.resize(self.capacity * 2)
 
-        # - get the index where this value needs to be added - can do that by using the hash index function and passing it the value
-        # - use the index to update the correct spot in the storage, also use HashTable entry to make the new entry in the storage a linked list passing in the key and value
         storage_index = self.hash_index(key)
-        # check if the storage already has a value stored in it at the given index - if it does, i need to traverse the linked list until the next value becomes None
-        # once there is an empty spot in the linked list i can set the new value to that node in the linked list
         if self.storage[storage_index] is not None:
             current_node = self.storage[storage_index]
             while current_node.key != key:
@@ -190,10 +188,6 @@ class HashTable:
 
         Implement this.
         """
-        # use the hash index function to get the index of the key in the storage
-        # check if the value at the index is None - if it is return None, if not
-        # traverse the linked list at the index and compare the key we are searching for with the key and the current_node
-        # if we find the key, return the value associated with that key, otherwise return None if we traverse the whole linked list without finding the key
 
         storage_index = self.hash_index(key)
         # print("storage_index", storage_index)
@@ -218,10 +212,6 @@ class HashTable:
 
         Implement this.
         """
-        # create a new storage that has the capacity of the new capacity put in
-        # iterate over the old storage
-            # for each linked list in the storage i will need to traverse the linked list and rehash each key again
-            # and then assign the new hashed key into the new storage following same procedure
         
         old_storage = self.storage.copy()
         
