@@ -54,6 +54,8 @@ count_dict = {
     "Z": 0
 }
 
+caesar_key_dict = {}
+
 FA_dict = {
     "E": 11.53,
     "T": 9.75,
@@ -93,63 +95,31 @@ for char in cipher_text:
     else:
         count_dict[char] += 1
 
-# get the sum of the values in the count dict - this is useful for calculating each letters freq analysis
+
+# loop through the count_dict and calculate the freq analysis for each number
+for key, value in count_dict.items():
+    freq_analysis = (value / sum(list(count_dict.values()))) * 100
+    freq_analysis = round(freq_analysis, 2)
+
+    # using the freq_analysis with the FA_dicts values i can compare to see which letters are paired with eachother
+    for FA_key, FA_value in FA_dict.items():
+        if FA_value == freq_analysis:
+            caesar_key_dict[key] = FA_key
+
+# print(caesar_key_dict)
+
+# when trying to add the value from the dict to the cracked text - it will fail when the key is not in the dict
+# in this case i can just add the char to the cracked text since the only cases where it will fail is when it is a space
+# or some other non letter character that i dont have in the dict
 for char in cipher_text:
-    if char == "W":
-        cracked_text += "E"
-    elif char == "J":
-        cracked_text += "T"
-    elif char == "M":
-        cracked_text += "A"
-    elif char == "X":
-        cracked_text += "O"
-    elif char == "C":
-        cracked_text += "H"
-    elif char == "D":
-        cracked_text += "N"
-    elif char == "K":
-        cracked_text += "R"
-    elif char == "I":
-        cracked_text += "I"
-    elif char == "N":
-        cracked_text += "S"
-    elif char == "U":
-        cracked_text += "D"
-    elif char == "S":
-        cracked_text += "L"
-    elif char == "O":
-        cracked_text += "W"
-    elif char == "G":
-        cracked_text += "U"
-    elif char == "Q":
-        cracked_text += "G"
-    elif char == "B":
-        cracked_text += "F"
-    elif char == "Y":
-        cracked_text += "B"
-    elif char == "E":
-        cracked_text += "M"
-    elif char == "F":
-        cracked_text += "Y"
-    elif char == "A":
-        cracked_text += "C"
-    elif char == "Z":
-        cracked_text += "P"
-    elif char == "P":
-        cracked_text += "K"
-    elif char == "H":
-        cracked_text += "V"
-    elif char == "V":
-        cracked_text += "Q"
-    elif char == "T":
-        cracked_text += "J"
-    elif char == "L":
-        cracked_text += "X"
-    elif char == "R":
-        cracked_text += "Z"
-    else:
+    try:
+        cracked_text += caesar_key_dict[char]
+    except:
         cracked_text += char
     
 
+# write the cracked code to the cracked.txt file
+with open("./crack_caesar/cracked.txt", "w") as data:
+    data.write(cracked_text)
+    # cipher_text = data.read()
 
-print(cracked_text)
