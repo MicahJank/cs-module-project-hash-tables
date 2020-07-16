@@ -20,7 +20,7 @@ if it does not exist in the data set i need to create that word in the data set 
 # this is the function that creates the crazy sentence
 # eg - "Pink brown bunnies!"
 def create_nonsense(word):
-    print(word, end=" ")
+    print(word, end=" ")    
     if word[-1] == '"' and word[-2] in punctuation:
         return word
     elif word[-1] in punctuation:
