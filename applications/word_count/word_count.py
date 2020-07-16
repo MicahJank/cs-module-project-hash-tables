@@ -19,7 +19,7 @@ def word_count(s):
     update_s = s.lower()
     update_s = remove_bad_char(update_s)
     word_list = update_s.split()
-
+    print(word_list)
     for word in word_list:
         if word == "":
             continue
@@ -32,13 +32,14 @@ def word_count(s):
     return word_dict
 
 
+word_count('a a\ra\na\ta \t\r\n hello\nThere')
 
 
 
-if __name__ == "__main__":
-    print(word_count(""))
-    print(word_count("Hello"))
-    print(word_count('Hello, my cat. And my cat doesn\'t say "hello" back.'))
-    print(word_count('This is a test of the emergency broadcast network. This is only a test.'))
-    # print(word_count("hello \ my friend \hello \again"))
-    print(word_count('a a\ra\na\ta \t\r\n'))
+# if __name__ == "__main__":
+#     print(word_count(""))
+#     print(word_count("Hello"))
+#     print(word_count('Hello, my cat. And my cat doesn\'t say "hello" back.'))
+#     print(word_count('This is a test of the emergency broadcast network. This is only a test.'))
+#     # print(word_count("hello \ my friend \hello \again"))
+#     print(word_count('a a\ra\na\ta \t\r\n'))
