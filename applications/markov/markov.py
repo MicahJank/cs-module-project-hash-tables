@@ -42,6 +42,7 @@ def choose_start_word():
 
     # if none of the 5 choices are what i want then i use recursion to re run the function until i get start word
     return choose_start_word()
+        
 
 def create_data_set():
     for i, word in enumerate(words_list):
@@ -62,7 +63,7 @@ start_word = choose_start_word()
 nonsense = create_nonsense(start_word)
 
 
-# clear the output.txt before filling it out with the nonsense
+# # clear the output.txt before filling it out with the nonsense
 with open('./markov/output.txt', "r+") as data:
     data.truncate(0)
     data.write(nonsense)
