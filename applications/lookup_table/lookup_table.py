@@ -1,4 +1,8 @@
+import random
+import math
 # Your code here
+
+lookup_table = {}
 
 
 def slowfun_too_slow(x, y):
@@ -9,12 +13,27 @@ def slowfun_too_slow(x, y):
 
     return v
 
+
 def slowfun(x, y):
     """
     Rewrite slowfun_too_slow() in here so that the program produces the same
     output, but completes quickly instead of taking ages to run.
     """
-    # Your code here
+
+    v = 0
+    # basically i check first to see if the value is already in the lookup table - if it is then i dont need to compute the numbers
+    try:
+        v = lookup_table[f"{x}-{y}"]
+        return v
+    except:
+        v = math.pow(x, y)
+        v = math.factorial(v)
+        v //= (x + y)
+        v %= 982451653
+
+        lookup_table[f'{x}-{y}'] = v
+        return v
+        
 
 
 
@@ -24,3 +43,5 @@ for i in range(50000):
     x = random.randrange(2, 14)
     y = random.randrange(3, 6)
     print(f'{i}: {x},{y}: {slowfun(x, y)}')
+
+# print(lookup_table)
